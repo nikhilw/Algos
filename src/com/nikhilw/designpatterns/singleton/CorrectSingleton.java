@@ -64,15 +64,15 @@ public class CorrectSingleton implements Serializable, Cloneable {
 	 * 
 	 * @return
 	 */
-	protected Object readResolve() {
+	private Object readResolve() {
 		return INSTANCE;
 	}
 }
 
 // Have you covered?
-//TODO ensured correct copies in multi-threaded? volatile
-//TODO synchronization
-//TODO double checked locking
-//TODO cloning
-//TODO serialization
-//TODO reflection
+// Ensured correct copies in multi-threaded? volatile
+// Synchronization
+// Double checked locking
+// Cloning
+// Serialization
+// Reflection
