@@ -1,5 +1,7 @@
 package com.nikhilw.designpatterns.singleton;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 /**
@@ -57,13 +59,26 @@ public class CorrectSingleton implements Serializable, Cloneable {
 		
 	}
 	
+	
 	/**
 	 * Guard against "serialize-deserialize" to create another copy of the
-	 * object, this method is called after the deserialization is done, when
-	 * resolving the objects after reading from the readStream.
+	 * object, readResolve is called after the deserialization is done, when
+	 * resolving the objects after reading from the readStream. But it alone
+	 * cannot work for scenarios where the class is not already loaded. In that
+	 * case just readResolve will return null and there will be no way of
+	 * creating the instace, even by calling getInstance method. Directly
+	 * calling getInstance form readResolve is also not helpful, since it will
+	 * create an instance even when the object was not really required,
+	 * diminishing the effect of lazy instantiation. Therefore readObject is
+	 * used. It is called before readResolve.
 	 * 
 	 * @return
 	 */
+	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+		ois.defaultReadObject();
+		INSTANCE = this;
+	}
+	
 	private Object readResolve() {
 		return INSTANCE;
 	}
